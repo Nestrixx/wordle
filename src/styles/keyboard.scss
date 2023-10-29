@@ -7,6 +7,7 @@
 .testButton {
   width: 43px;
   height: 58px;
+  // padding: 10px;
   background-color: #563d43;
   font-size: 1.25em;
   border-radius: 4px;
@@ -27,4 +28,8 @@
 
 .svgButton {
   background-color: #563d43;
+}
+
+.lowRowKeys:first-child {
+  width: 65.4px;
 }

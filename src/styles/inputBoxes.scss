@@ -1,0 +1,14 @@
+.boxWrapper:last-child {
+  margin-bottom: 20px;
+}
+
+.letterBox {
+  height: 62px;
+  width: 62px;
+  font-size: 3rem;
+  text-align: center;
+}
+
+.letterBox:focus {
+  outline: none;
+}
