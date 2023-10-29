@@ -1,12 +1,13 @@
 import "../styles/navbar.scss";
+import RavenImg from "../assets/RavenEmblem.png";
 
-const navBar = () => {
+const Navbar = () => {
   return (
     <header className="navbarWrapper">
-      <image src="Raven.png"></image>
+      <img className="navbarEmblem" src={RavenImg}></img>
       <h1 className="title">Wordle</h1>
     </header>
   );
 };
 
-export default navBar;
+export default Navbar;
