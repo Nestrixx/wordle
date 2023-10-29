@@ -1,0 +1,30 @@
+.keyboardRow {
+  display: flex;
+  margin-bottom: 8px;
+  justify-content: center;
+}
+
+.testButton {
+  width: 43px;
+  height: 58px;
+  background-color: #563d43;
+  font-size: 1.25em;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+.testButton:focus {
+  outline: none;
+}
+
+.game-icon {
+  background-color: #563d43;
+}
+
+.svgButton {
+  background-color: #563d43;
+}
