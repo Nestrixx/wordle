@@ -1,5 +1,7 @@
-.boxWrapper:last-child {
-  margin-bottom: 20px;
+@import "theme";
+.boxWrapper {
+  margin-bottom: 30px;
+  // gap: 5px;
 }
 
 .letterBox {
@@ -7,6 +9,10 @@
   width: 62px;
   font-size: 3rem;
   text-align: center;
+  background-color: $expdark;
+  text-transform: uppercase;
+  margin: 2px;
+  border-radius: 5px;
 }
 
 .letterBox:focus {

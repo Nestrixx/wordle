@@ -5,7 +5,7 @@ const Navbar = () => {
   return (
     <header className="navbarWrapper">
       <img className="navbarEmblem" src={RavenImg}></img>
-      <h1 className="title">Wordle</h1>
+      <h1 className="title">Nextrix's Wordle</h1>
     </header>
   );
 };

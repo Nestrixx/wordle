@@ -4,7 +4,7 @@ import "../styles/keyboard.scss";
 const Keyboard = () => {
   const topRowKeys = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
   const middleRowKeys = ["a", "s", "d", "f", "g", "h", "j", "k", "l"];
-  const lowRowKeys = ["enter", "z", "x", "c", "v", "b", "n", "m"];
+  const lowRowKeys = ["z", "x", "c", "v", "b", "n", "m"];
 
   const [count, setCount] = useState(0);
   useEffect(() => {
@@ -38,6 +38,9 @@ const Keyboard = () => {
         ))}
       </div>
       <div className="keyboardRow">
+        <button className="enterButton" type="button">
+          {"Enter "}
+        </button>
         {lowRowKeys.map((key) => (
           <button className="testButton" type="button" key={key}>
             {key}
