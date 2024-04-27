@@ -1,20 +1,13 @@
-import { useContext } from "react";
 import "../styles/inputBoxes.scss";
-import { GameStateContext } from "../contexts/GameStateContext";
 const InputBoxes = () => {
-  const { gameRound, gameState } = useContext(GameStateContext);
-
+  const columns = 5;
+  const inputsPerColumn = 5;
   //refactor this to use loops to generate the rows.
 
   return (
     <div className="boxWrapper">
       <div className="column1">
-        <input
-          className="letterBox"
-          type="text"
-          maxLength={1}
-          value={gameState[gameRound]?.[0] ?? ""}
-        />
+        <input className="letterBox" type="text" maxLength={1} />
         <input className="letterBox" type="text" maxLength={1} />
         <input className="letterBox" type="text" maxLength={1} />
         <input className="letterBox" type="text" maxLength={1} />

@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import "../styles/keyboard.scss";
-import { GameStateContext } from "../contexts/GameStateContext";
+
 
 const Keyboard = () => {
-  const { setGameState, gameRound } = useContext(GameStateContext);
+  //needs to be refactored useing props and usestate
 
   const topRowKeys = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
   const middleRowKeys = ["a", "s", "d", "f", "g", "h", "j", "k", "l"];
@@ -11,25 +11,12 @@ const Keyboard = () => {
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const currentValue = event.currentTarget.value;
-    setGameState((prevState) => {
-      return {
-        ...prevState,
-        [gameRound]: [...(prevState[gameRound] || []), currentValue],
-      };
-    });
   };
 
-  // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-  //   setGameState((prevState) => {
-  //     return { [gameRound]: [event.currentTarget.value] };
-  //   });
-  //   /*
-  //   {0: [h, e, l, l, o]}
-  //   */
-  // };
-  /*
-    {0: [h, e, l, l, o]}
-    */
+  const handleBackspace= (event: React.MouseEvent<HTMLButtonElement>) => {
+
+  }
+
   return (
     <div>
       <div className="keyboardRow">
@@ -73,7 +60,7 @@ const Keyboard = () => {
             {key}
           </button>
         ))}
-        <button className="backspaceButton">
+        <button onClick={handleBackspace} className="backspaceButton">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
