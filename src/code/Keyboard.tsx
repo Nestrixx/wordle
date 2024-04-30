@@ -1,9 +1,16 @@
-import { useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import "../styles/keyboard.scss";
 
+type Props = {
+  gameState: string[][];
+  setGameState: Dispatch<SetStateAction<string[][]>>;
+  gameRound: number;
+}
 
-const Keyboard = () => {
+
+const Keyboard: React.FC<Props> = ({gameState, setGameState, gameRound}) => {
   //needs to be refactored useing props and usestate
+  
 
   const topRowKeys = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
   const middleRowKeys = ["a", "s", "d", "f", "g", "h", "j", "k", "l"];
@@ -11,11 +18,28 @@ const Keyboard = () => {
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const currentValue = event.currentTarget.value;
+    const updatedCurrentGameRound = gameState[gameRound];
+    if(updatedCurrentGameRound.length < 5){
+      updatedCurrentGameRound.push(currentValue);
+      setGameState((prevState) => {
+        let newState = [...prevState];
+        newState[gameRound] = updatedCurrentGameRound;
+        return newState;
+      })
+    }
   };
 
-  const handleBackspace= (event: React.MouseEvent<HTMLButtonElement>) => {
-
-  }
+  const handleBackspace = () => {
+    const currentGameState = gameState[gameRound];
+    if (currentGameState.length > 0) {
+      setGameState(prevState => {
+        let newState = [...prevState];
+        newState[gameRound] = newState[gameRound].slice(0, -1);
+        return newState;
+      });
+    }
+  };
+  
 
   return (
     <div>

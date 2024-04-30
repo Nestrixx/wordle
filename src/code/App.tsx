@@ -4,16 +4,16 @@ import InputBoxes from "./InputBoxes";
 import "../styles/app.scss";
 import { useState } from "react";
 
-function App() {
-  const [gameState, setGameState] = useState({});
-  const [gameRound, setGameRound] = useState(0);
+const App = () => {
+const [gameState, setGameState] = useState<string[][]>([[]]);
+const [gameRound, setGameRound] = useState<number>(0);
 
   return (
     <div className="app">
       <Navbar />
       <div className="gameWrapper">
-          <InputBoxes />
-          <Keyboard />
+          <InputBoxes gameState={gameState} />
+          <Keyboard gameState={gameState} setGameState={ setGameState} gameRound={gameRound}/>
       </div>
     </div>
   );
