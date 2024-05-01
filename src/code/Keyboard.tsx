@@ -1,16 +1,21 @@
 import { Dispatch, SetStateAction } from "react";
 import "../styles/keyboard.scss";
+import { maximumNumberOfLettersPerGuess, numberOfTotalPossibleRounds } from "../constants/constants";
 
 type Props = {
   gameState: string[][];
   setGameState: Dispatch<SetStateAction<string[][]>>;
   gameRound: number;
-}
+  setGameRound: Dispatch<SetStateAction<number>>;
+};
 
-
-const Keyboard: React.FC<Props> = ({gameState, setGameState, gameRound}) => {
-  //needs to be refactored useing props and usestate
-  
+const Keyboard: React.FC<Props> = ({
+  gameState,
+  setGameState,
+  gameRound,
+  setGameRound,
+}) => {
+  let temporaryPlaceholderForDailyWord = "rusty";
 
   const topRowKeys = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
   const middleRowKeys = ["a", "s", "d", "f", "g", "h", "j", "k", "l"];
@@ -19,27 +24,55 @@ const Keyboard: React.FC<Props> = ({gameState, setGameState, gameRound}) => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const currentValue = event.currentTarget.value;
     const updatedCurrentGameRound = gameState[gameRound];
-    if(updatedCurrentGameRound.length < 5){
+    if (updatedCurrentGameRound.length < maximumNumberOfLettersPerGuess) {
       updatedCurrentGameRound.push(currentValue);
       setGameState((prevState) => {
         let newState = [...prevState];
         newState[gameRound] = updatedCurrentGameRound;
         return newState;
-      })
+      });
+    }
+  };
+
+  // we have it where the current guess is comparing to the placeholder word and is comparing correctly
+  // we will need to then advance the gameround state. change the styling for the inputboxes, and of course not hardcode the word of the day.
+  const handleEnter = () => {
+    // split the daily word into an array for comparison
+    let tempPlaceholderArray = temporaryPlaceholderForDailyWord.split("");
+    if (gameState.length < numberOfTotalPossibleRounds) {
+      // loop through each element and compare to our current gameState/ current guess
+      tempPlaceholderArray.forEach((element, index) => {
+        if (gameState[gameRound][index] === element) {
+          console.log(true);
+        } else console.log(false);
+      });
+
+      // updating gameRound
+      let gameRoundClone = gameRound;
+      gameRoundClone += 1;
+      setGameRound(gameRoundClone);
+
+      // now we need to push on a new empty array into gameState
+      let newGameState = [...gameState];
+      newGameState.push([]);
+      setGameState(newGameState);
+    }
+    else{
+      // update this with a popup message or something
+      console.log("you can't do this there are only 5 game rounds");
     }
   };
 
   const handleBackspace = () => {
     const currentGameState = gameState[gameRound];
     if (currentGameState.length > 0) {
-      setGameState(prevState => {
+      setGameState((prevState) => {
         let newState = [...prevState];
         newState[gameRound] = newState[gameRound].slice(0, -1);
         return newState;
       });
     }
   };
-  
 
   return (
     <div>
@@ -70,8 +103,8 @@ const Keyboard: React.FC<Props> = ({gameState, setGameState, gameRound}) => {
         ))}
       </div>
       <div className="keyboardRow">
-        <button className="enterButton" type="button">
-          {"Enter "}
+        <button onClick={handleEnter} className="enterButton" type="button">
+          {"Enter"}
         </button>
         {lowRowKeys.map((key) => (
           <button

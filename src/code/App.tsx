@@ -17,6 +17,7 @@ const App = () => {
           gameState={gameState}
           setGameState={setGameState}
           gameRound={gameRound}
+          setGameRound={setGameRound}
         />
       </div>
     </div>
@@ -24,3 +25,10 @@ const App = () => {
 };
 
 export default App;
+
+
+/*
+
+1. 
+
+*/
