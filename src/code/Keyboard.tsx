@@ -39,7 +39,10 @@ const Keyboard: React.FC<Props> = ({
   const handleEnter = () => {
     // split the daily word into an array for comparison
     let tempPlaceholderArray = temporaryPlaceholderForDailyWord.split("");
-    if (gameState.length <= numberOfTotalPossibleRounds) {
+    if(gameState[gameRound].length === 0){
+      console.log("this doesn't work");
+    }
+    else if (gameState.length <= numberOfTotalPossibleRounds) {
       // loop through each element and compare to our current gameState/ current guess
       tempPlaceholderArray.forEach((element, index) => {
         if (gameState[gameRound][index] === element) {
