@@ -15,6 +15,28 @@
   border-radius: 5px;
 }
 
+.greenLetterBox {
+  height: 62px;
+  width: 62px;
+  font-size: 3rem;
+  text-align: center;
+  background-color: green;
+  text-transform: uppercase;
+  margin: 2px;
+  border-radius: 5px;
+}
+
+.yellowLetterBox {
+  height: 62px;
+  width: 62px;
+  font-size: 3rem;
+  text-align: center;
+  background-color: $expyellow;
+  text-transform: uppercase;
+  margin: 2px;
+  border-radius: 5px;
+}
+
 .letterBox:focus {
   outline: none;
 }

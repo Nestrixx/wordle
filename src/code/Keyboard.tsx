@@ -7,6 +7,8 @@ type Props = {
   setGameState: Dispatch<SetStateAction<string[][]>>;
   gameRound: number;
   setGameRound: Dispatch<SetStateAction<number>>;
+  setInputBoxStyles: Dispatch<SetStateAction<string[][]>>;
+  inputBoxStyles: string[][];
 };
 
 const Keyboard: React.FC<Props> = ({
@@ -14,12 +16,20 @@ const Keyboard: React.FC<Props> = ({
   setGameState,
   gameRound,
   setGameRound,
+  setInputBoxStyles,
+  inputBoxStyles
 }) => {
-  let temporaryPlaceholderForDailyWord = "rusty";
-
+  
   const topRowKeys = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
   const middleRowKeys = ["a", "s", "d", "f", "g", "h", "j", "k", "l"];
   const lowRowKeys = ["z", "x", "c", "v", "b", "n", "m"];
+  
+  // these next three lines need to be changed once we have a backend to get a word of the day from.
+  let temporaryPlaceholderForDailyWord = "rusty";
+  // we make a map of the WoD to compare each value to the current guess
+  let tempPlaceholderArray = temporaryPlaceholderForDailyWord.split("");
+  // we make a map of the WoD for further comparison this will allow us to see if the letter is in the map and how many occurrences there are. 
+  let wordOftheDayMap = new Map();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const currentValue = event.currentTarget.value;
@@ -37,18 +47,49 @@ const Keyboard: React.FC<Props> = ({
   // we have it where the current guess is comparing to the placeholder word and is comparing correctly
   // we will need to then advance the gameround state. change the styling for the inputboxes, and of course not hardcode the word of the day.
   const handleEnter = () => {
-    // split the daily word into an array for comparison
-    let tempPlaceholderArray = temporaryPlaceholderForDailyWord.split("");
-    if(gameState[gameRound].length === 0){
+    //we create a new map every time because we need to check the number of occurrences each time we hit enter no only once but for ever round. 
+    tempPlaceholderArray.forEach((element) => {
+      if(wordOftheDayMap.get(element) === undefined){
+        wordOftheDayMap.set(element, 1);
+      }
+      else wordOftheDayMap.set(element, wordOftheDayMap.get(element) + 1);
+    });
+
+    // we check to see if the current entered guess is less than 5 letters if it is we log out an error message  THIS NEEDS TO BE CHANGED TO A MORE ELEGANT SOLUTION!!!!!!!!
+    if(gameState[gameRound].length < 5){
       console.log("this doesn't work");
     }
     else if (gameState.length <= numberOfTotalPossibleRounds) {
       // loop through each element and compare to our current gameState/ current guess
       tempPlaceholderArray.forEach((element, index) => {
-        if (gameState[gameRound][index] === element) {
-          console.log(true);
-        } else console.log(false);
+        let currentLetterLookedAt = gameState[gameRound][index];
+        if(element === currentLetterLookedAt){
+          let tempInputBoxStyles = [...inputBoxStyles] as string[][]; // WHY DID i NEED TO DO THE AS???? AS BRIZZLES
+          tempInputBoxStyles[gameRound][index] = "greenLetterBox";
+          setInputBoxStyles(tempInputBoxStyles);
+          console.log(element + ": element in word of the day array");
+          console.log(currentLetterLookedAt + ": current letter looked at");
+          wordOftheDayMap.set(currentLetterLookedAt, wordOftheDayMap.get(currentLetterLookedAt) - 1);
+        }
+
+        else if(wordOftheDayMap.get(currentLetterLookedAt) === undefined || wordOftheDayMap.get(currentLetterLookedAt) === 0){
+          console.log("gray");
+          console.log(element + ": element in word of the day array");
+          console.log(currentLetterLookedAt + ": current letter looked at");
+        }
       });
+
+      tempPlaceholderArray.forEach((element, index) => {
+        let currentLetterLookedAt = gameState[gameRound][index];
+        if(wordOftheDayMap.get(currentLetterLookedAt) !== undefined && wordOftheDayMap.get(currentLetterLookedAt) > 0){
+          let tempInputBoxStyles = [...inputBoxStyles] as string[][]; // WHY DID i NEED TO DO THE AS???? AS BRIZZLES
+          tempInputBoxStyles[gameRound][index] = "yellowLetterBox";
+          setInputBoxStyles(tempInputBoxStyles);
+          wordOftheDayMap.set(currentLetterLookedAt, wordOftheDayMap.get(currentLetterLookedAt) - 1);
+          console.log(element + ": element in word of the day array");
+          console.log(currentLetterLookedAt + ": current letter looked at");
+        }
+      })
 
       // updating gameRound
       let gameRoundClone = gameRound;
