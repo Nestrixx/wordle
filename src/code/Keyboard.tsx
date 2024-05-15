@@ -1,129 +1,27 @@
-import { Dispatch, SetStateAction } from "react";
 import "../styles/keyboard.scss";
-import { maximumNumberOfLettersPerGuess, numberOfTotalPossibleRounds } from "../constants/constants";
 
 type Props = {
-  gameState: string[][];
-  setGameState: Dispatch<SetStateAction<string[][]>>;
-  gameRound: number;
-  setGameRound: Dispatch<SetStateAction<number>>;
-  setInputBoxStyles: Dispatch<SetStateAction<string[][]>>;
-  inputBoxStyles: string[][];
+  onCharacterPress: (character: string) => void;
+  onBackspace: () => void;
+  onSubmit: () => void;
 };
 
 const Keyboard: React.FC<Props> = ({
-  gameState,
-  setGameState,
-  gameRound,
-  setGameRound,
-  setInputBoxStyles,
-  inputBoxStyles
+  onCharacterPress,
+  onBackspace,
+  onSubmit
 }) => {
   
   const topRowKeys = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
   const middleRowKeys = ["a", "s", "d", "f", "g", "h", "j", "k", "l"];
   const lowRowKeys = ["z", "x", "c", "v", "b", "n", "m"];
-  
-  // these next three lines need to be changed once we have a backend to get a word of the day from.
-  let temporaryPlaceholderForDailyWord = "rusty";
-  // we make a map of the WoD to compare each value to the current guess
-  let tempPlaceholderArray = temporaryPlaceholderForDailyWord.split("");
-  // we make a map of the WoD for further comparison this will allow us to see if the letter is in the map and how many occurrences there are. 
-  let wordOftheDayMap = new Map();
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const currentValue = event.currentTarget.value;
-    const updatedCurrentGameRound = gameState[gameRound];
-    if (updatedCurrentGameRound.length < maximumNumberOfLettersPerGuess) {
-      updatedCurrentGameRound.push(currentValue);
-      setGameState((prevState) => {
-        let newState = [...prevState];
-        newState[gameRound] = updatedCurrentGameRound;
-        return newState;
-      });
-    }
-  };
-
-  // we have it where the current guess is comparing to the placeholder word and is comparing correctly
-  // we will need to then advance the gameround state. change the styling for the inputboxes, and of course not hardcode the word of the day.
-  const handleEnter = () => {
-    //we create a new map every time because we need to check the number of occurrences each time we hit enter no only once but for ever round. 
-    tempPlaceholderArray.forEach((element) => {
-      if(wordOftheDayMap.get(element) === undefined){
-        wordOftheDayMap.set(element, 1);
-      }
-      else wordOftheDayMap.set(element, wordOftheDayMap.get(element) + 1);
-    });
-
-    // we check to see if the current entered guess is less than 5 letters if it is we log out an error message  THIS NEEDS TO BE CHANGED TO A MORE ELEGANT SOLUTION!!!!!!!!
-    if(gameState[gameRound].length < 5){
-      console.log("this doesn't work");
-    }
-    else if (gameState.length <= numberOfTotalPossibleRounds) {
-      // loop through each element and compare to our current gameState/ current guess
-      tempPlaceholderArray.forEach((element, index) => {
-        let currentLetterLookedAt = gameState[gameRound][index];
-        if(element === currentLetterLookedAt){
-          let tempInputBoxStyles = [...inputBoxStyles] as string[][]; // WHY DID i NEED TO DO THE AS???? AS BRIZZLES
-          tempInputBoxStyles[gameRound][index] = "greenLetterBox";
-          setInputBoxStyles(tempInputBoxStyles);
-          console.log(element + ": element in word of the day array");
-          console.log(currentLetterLookedAt + ": current letter looked at");
-          wordOftheDayMap.set(currentLetterLookedAt, wordOftheDayMap.get(currentLetterLookedAt) - 1);
-        }
-
-        else if(wordOftheDayMap.get(currentLetterLookedAt) === undefined || wordOftheDayMap.get(currentLetterLookedAt) === 0){
-          console.log("gray");
-          console.log(element + ": element in word of the day array");
-          console.log(currentLetterLookedAt + ": current letter looked at");
-        }
-      });
-
-      tempPlaceholderArray.forEach((element, index) => {
-        let currentLetterLookedAt = gameState[gameRound][index];
-        if(wordOftheDayMap.get(currentLetterLookedAt) !== undefined && wordOftheDayMap.get(currentLetterLookedAt) > 0){
-          let tempInputBoxStyles = [...inputBoxStyles] as string[][]; // WHY DID i NEED TO DO THE AS???? AS BRIZZLES
-          tempInputBoxStyles[gameRound][index] = "yellowLetterBox";
-          setInputBoxStyles(tempInputBoxStyles);
-          wordOftheDayMap.set(currentLetterLookedAt, wordOftheDayMap.get(currentLetterLookedAt) - 1);
-          console.log(element + ": element in word of the day array");
-          console.log(currentLetterLookedAt + ": current letter looked at");
-        }
-      })
-
-      // updating gameRound
-      let gameRoundClone = gameRound;
-      gameRoundClone += 1;
-      setGameRound(gameRoundClone);
-
-      // now we need to push on a new empty array into gameState
-      let newGameState = [...gameState];
-      newGameState.push([]);
-      setGameState(newGameState);
-    }
-    else{
-      // update this with a popup message or something
-      console.log("you can't do this there are only 5 game rounds");
-    }
-  };
-
-  const handleBackspace = () => {
-    const currentGameState = gameState[gameRound];
-    if (currentGameState.length > 0) {
-      setGameState((prevState) => {
-        let newState = [...prevState];
-        newState[gameRound] = newState[gameRound].slice(0, -1);
-        return newState;
-      });
-    }
-  };
 
   return (
     <div>
       <div className="keyboardRow">
         {topRowKeys.map((key) => (
           <button
-            onClick={handleClick}
+            onClick={(event) => onCharacterPress(event.currentTarget.value)}
             className="testButton"
             type="button"
             key={key}
@@ -136,7 +34,7 @@ const Keyboard: React.FC<Props> = ({
       <div className="keyboardRow">
         {middleRowKeys.map((key) => (
           <button
-            onClick={handleClick}
+            onClick={(event) => onCharacterPress(event.currentTarget.value)}
             className="testButton"
             type="button"
             key={key}
@@ -147,12 +45,12 @@ const Keyboard: React.FC<Props> = ({
         ))}
       </div>
       <div className="keyboardRow">
-        <button onClick={handleEnter} className="enterButton" type="button">
+        <button onClick={onSubmit} className="enterButton" type="button">
           {"Enter"}
         </button>
         {lowRowKeys.map((key) => (
           <button
-            onClick={handleClick}
+            onClick={(event) => onCharacterPress(event.currentTarget.value)}
             className="testButton"
             type="button"
             key={key}
@@ -161,7 +59,7 @@ const Keyboard: React.FC<Props> = ({
             {key}
           </button>
         ))}
-        <button onClick={handleBackspace} className="backspaceButton">
+        <button onClick={onBackspace} className="backspaceButton">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
